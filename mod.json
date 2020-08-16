@@ -1,0 +1,7 @@
+{
+	"name": "no-more-delayed-buffs",
+	"update": "github:tera-mods/no-more-delayed-buffs",
+	"title": "No More Delayed Buffs",
+	"authors": ["Pinkie Pie", "SaltyMonkey"],
+	"description": "Fixes a bug introduced in patch 97 where buff stack count is delayed."
+}

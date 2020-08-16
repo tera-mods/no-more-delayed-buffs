@@ -1,25 +1,18 @@
-module.exports = function noMoreDelayedBuffs(mod) {
-	if (mod.majorPatchVersion < 97) {
-		mod.log("This mod fixing insues with x64 client only. Unavailable with your patch");
-		return;
-	}
+module.exports = function NoMoreDelayedBuffs(mod) {
+	if(mod.patchVersion < 97) return
 
-	mod.game.initialize("me");
-	
-	mod.hook("S_ABNORMALITY_REFRESH", 2, { "order": 99999999, "filter": { "fake": null } }, (event) => {
+	let gameId = -1n,
+		stacks = new Map()
 
-		if (event.target !== mod.game.me.gameId) return;
-		mod.send("S_ABNORMALITY_END", 1, {
-			"target": mod.game.me.gameId,
-			"id": event.id
-		});
-		mod.send("S_ABNORMALITY_BEGIN", 4, {
-			"target": mod.game.me.gameId,
-			"source": mod.game.me.gameId,
-			"id": event.id,
-			"duration": event.duration,
-			"stacks": event.stacks
-		});
-		return false;
-	});
-};
+	mod.hook('S_LOGIN', 14, event => { ({ gameId} = event) })
+
+	mod.hook('S_ABNORMALITY_REFRESH', 2, event => {
+		if(event.target !== gameId || stacks === stacks.get(event.id)) return
+
+		stacks.set(event.id, event.stacks)
+		event.source = event.target
+		mod.send('S_ABNORMALITY_END', 1, event)
+		mod.send('S_ABNORMALITY_BEGIN', 1, event)
+		return false
+	})
+}
