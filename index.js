@@ -12,7 +12,7 @@ module.exports = function NoMoreDelayedBuffs(mod) {
 		stacks.set(event.id, event.stacks)
 		event.source = event.target
 		mod.send('S_ABNORMALITY_END', 1, event)
-		mod.send('S_ABNORMALITY_BEGIN', 1, event)
+		mod.send('S_ABNORMALITY_BEGIN', 4, event)
 		return false
 	})
 }
