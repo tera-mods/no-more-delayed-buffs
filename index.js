@@ -6,7 +6,7 @@ module.exports = function NoMoreDelayedBuffs(mod) {
 
 	mod.hook('S_LOGIN', 14, event => { ({ gameId} = event) })
 
-	mod.hook('S_ABNORMALITY_REFRESH', 2, event => {
+	mod.hook('S_ABNORMALITY_REFRESH', 2, { order: 100, filter: { fake: null } }, event => {
 		if(event.target !== gameId || stacks === stacks.get(event.id)) return
 
 		stacks.set(event.id, event.stacks)
